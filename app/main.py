@@ -32,49 +32,49 @@ class CourseCreate(BaseModel):
     title: str
     description: str
 
-@app.post("/courses/")
+@app.post("/courses")
 def create_course(course: CourseCreate):
     with open(DATA_FILE, 'r') as f:
         courses = json.load(f)
     
-    course_id = str(uuid.uuid4())
-    courses[course_id] = {"id": course_id, "title": course.title, "description": course.description}
+    id = str(uuid.uuid4())
+    courses[id] = {"id": id, "title": course.title, "description": course.description}
 
     with open(DATA_FILE, 'w') as f:
         json.dump(courses, f)
 
-    return {"message": "Course created", "data": courses[course_id]}
+    return {"message": "Course created", "data": courses[id]}
 
-@app.get("/courses/")
+@app.get("/courses")
 def get_courses():
     with open(DATA_FILE, 'r') as f:
         courses = json.load(f)
     return {"data": list(courses.values())}
 
-@app.get("/courses/{course_id}")
-def get_course(course_id: str):
+@app.get("/courses/{id}")
+def get_course(id: str):
     with open(DATA_FILE, 'r') as f:
         courses = json.load(f)
     
-    course = courses.get(course_id)
+    course = courses.get(id)
     if not course:
         raise HTTPException(
             status_code=404,
-            detail="The course with ID {} was not found.".format(course_id),
+            detail="The course with ID {} was not found.".format(id),
             headers={"X-Error": "Course not found"}
         )
     return {"data": course}
 
-@app.delete("/courses/{course_id}")
-def delete_course(course_id: str):
+@app.delete("/courses/{id}")
+def delete_course(id: str):
     with open(DATA_FILE, 'r') as f:
         courses = json.load(f)
     
-    course = courses.pop(course_id, None)
+    course = courses.pop(id, None)
     if not course:
         raise HTTPException(
             status_code=404,
-            detail="The course with ID {} was not found.".format(course_id),
+            detail="The course with ID {} was not found.".format(id),
             headers={"X-Error": "Course not found"}
         )
     
