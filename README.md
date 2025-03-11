@@ -1,19 +1,8 @@
-# TP0-IS2
-
-# 📌 Tabla de Contenidos
-
-- [Introducción](#introducción)
-- [Desafíos del Proyecto](#desafíos-del-proyecto)
-- [Pre-requisitos](#pre-requisitos)
-- [Construcción y Ejecución con Docker](#construcción-y-ejecución-con-docker)
-- [Base de Datos](#base-de-datos)
-- [Testing](#testing)
-
----
+# 📌 TP0-IS2
 
 ## 📖 Introducción
 
-Este proyecto es una API RESTful desarrollada con **FastAPI** en Python. La API permite gestionar "cursos" de manera sencilla utilizando almacenamiento en memoria. Su objetivo es servir como base para un trabajo práctico de la materia **Ingeniería de Software II**.
+Este proyecto es una API RESTful desarrollada con **FastAPI** en Python. La API permite gestionar "cursos" de manera sencilla utilizando almacenamiento en memoria.
 
 ---
 
