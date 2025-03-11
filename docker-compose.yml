@@ -1,0 +1,10 @@
+services:
+  app:
+    build: .
+    ports:
+      - "${PORT:-8080}:${PORT:-8080}"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data  # Mapea la carpeta local 'data' a la carpeta '/app/data' del contenedor
+    restart: always

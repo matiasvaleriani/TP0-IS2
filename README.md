@@ -39,33 +39,28 @@ Si deseas probar los endpoints de la API, puedes utilizar **Swagger UI**, que se
 
 ## 🐳 Construcción y Ejecución con Docker
 
-Para construir y ejecutar la imagen de Docker, sigue estos pasos:
+Para construir y ejecutar la imagen de Docker utilizando Docker Compose, sigue estos pasos:
 
-### 1️⃣ Construir la imagen
+### 1️⃣ Construir y levantar el contenedor
 ```sh
- docker build -t mi-api .
+docker-compose up --build -d
 ```
 
-### 2️⃣ Ejecutar el contenedor
-```sh
- docker run -d -p 8080:8080 --env-file .env mi-api
-```
-
-### 3️⃣ Verificar que el contenedor esté corriendo
+### 2️⃣ Verificar que el contenedor esté corriendo
 ```sh
  docker ps
 ```
 
-Para detener el contenedor en ejecución:
+### 3️⃣ Detener y eliminar el contenedor
 ```sh
- docker stop <CONTAINER_ID>
+ docker-compose down
 ```
 
 ---
 
 ## 🗄️ Base de Datos
 
-Actualmente, la API almacena los datos en memoria. No se está utilizando una base de datos, pero en el futuro se podría integrar **MongoDB** o **PostgreSQL** según los requerimientos.
+Actualmente, la API almacena los datos en un archivo JSON dentro del contenedor. Los datos se persisten en la carpeta data en el directorio del proyecto, lo que asegura que los datos se mantengan entre reinicios del contenedor.
 
 ---
 
