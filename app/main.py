@@ -157,16 +157,33 @@ def get_courses():
                 }
             }
         }
+    },
+    500: {
+        "description": "Internal server error",
+        "content": {
+            "application/json": {
+                "example": {
+                    "type": "about:blank",
+                    "title": "Internal Server Error",
+                    "status": 500,
+                    "detail": "An unexpected error occurred.",
+                    "instance": "/courses/{id}"
+                }
+            }
+        }
     }
 })
 def get_course(id: str):
-    with open(DATA_FILE, 'r') as f:
-        courses = json.load(f)
-    
-    course = courses.get(id)
-    if not course:
-        return create_error_response(404, f"The course with ID {id} was not found.", f"/courses/{id}")
-    return {"data": course}
+    try:
+        with open(DATA_FILE, 'r') as f:
+            courses = json.load(f)
+        
+        course = courses.get(id)
+        if not course:
+            return create_error_response(404, f"The course with ID {id} was not found.", f"/courses/{id}")
+        return {"data": course}
+    except Exception as e:
+        return create_error_response(500, "An unexpected error occurred.", f"/courses/{id}")
 
 # Ruta para eliminar un curso por ID
 @app.delete("/courses/{id}", status_code = 204, responses={
@@ -186,17 +203,35 @@ def get_course(id: str):
                 }
             }
         }
+    },
+    500: {
+        "description": "Internal server error",
+        "content": {
+            "application/json": {
+                "example": {
+                    "type": "about:blank",
+                    "title": "Internal Server Error",
+                    "status": 500,
+                    "detail": "An unexpected error occurred.",
+                    "instance": "/courses/{id}"
+                }
+            }
+        }
     }
 })
-def delete_course(id: str):
-    with open(DATA_FILE, 'r') as f:
-        courses = json.load(f)
-    
-    course = courses.pop(id, None)
-    if not course:
-        return create_error_response(404, f"The course with ID {id} was not found.", f"/courses/{id}")
-    
-    with open(DATA_FILE, 'w') as f:
-        json.dump(courses, f)
 
-    return {"message": "Course deleted successfully"}
+def delete_course(id: str):
+    try:
+        with open(DATA_FILE, 'r') as f:
+            courses = json.load(f)
+        
+        course = courses.pop(id, None)
+        if not course:
+            return create_error_response(404, f"The course with ID {id} was not found.", f"/courses/{id}")
+        
+        with open(DATA_FILE, 'w') as f:
+            json.dump(courses, f)
+
+        return {"message": "Course deleted successfully"}
+    except Exception as e:
+        return create_error_response(500, "An unexpected error occurred.", f"/courses/{id}")
