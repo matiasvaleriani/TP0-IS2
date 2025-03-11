@@ -1,23 +1,23 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from typing import Dict, Any
+from app.errorResponse import ErrorResponse
 import uuid
 import os
 import json
 from dotenv import load_dotenv
-from app.errorHandlingMiddleware import ErrorHandlingMiddleware
+from fastapi import Body
 
 # Cargar variables del archivo .env
 load_dotenv()
 
-# Obtener variables de entorno con valores por defecto
-HOST = os.getenv("HOST", "127.0.0.1")  # Si no se define, usa 127.0.0.1
+# Configuración de la aplicación
+HOST = os.getenv("HOST", "127.0.0.1")
 PORT = int(os.getenv("PORT", 8080))
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 
 app = FastAPI()
-
-# Registrar el middleware
-app.add_middleware(ErrorHandlingMiddleware)
 
 # Ruta del archivo de datos
 DATA_FILE = "/app/data/courses.json"
@@ -28,55 +28,173 @@ if not os.path.exists(DATA_FILE):
     with open(DATA_FILE, 'w') as f:
         json.dump({}, f)
 
+# Modelos para la creación de un curso y las respuestas
 class CourseCreate(BaseModel):
     title: str
     description: str
 
-@app.post("/courses")
-def create_course(course: CourseCreate):
+class CourseResponse(BaseModel):
+    data: Dict[str, Any]
+
+class ErrorResponse(BaseModel):
+    type: str
+    title: str
+    status: int
+    detail: str
+    instance: str
+
+# Función para crear respuestas de error en formato RFC 7807
+def create_error_response(status_code: int, detail: str, instance: str):
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            "type": "about:blank",
+            "title": detail,
+            "status": status_code,
+            "detail": detail,
+            "instance": instance
+        }
+    )
+
+# Ruta para crear un curso
+@app.post("/courses", status_code=201, response_model=CourseResponse, responses={
+    201: {
+        "description": "Course created successfully",
+        "content": {
+            "application/json": {
+                "example": {
+                    "data": {
+                        "id": 0,
+                        "title": "string",
+                        "description": "string"
+                    }
+                }
+            }
+        }
+    },
+    400: {
+        "description": "Bad request error",
+        "content": {
+            "application/json": {
+                "example": {
+                    "type": "about:blank",
+                    "title": "Bad Request",
+                    "status": 400,
+                    "detail": "Invalid input data",
+                    "instance": "/courses"
+                }
+            }
+        }
+    }
+})
+def create_course(course: Dict[str, Any] = Body(..., example={"title": "string", "description": "string"})):
+    if not isinstance(course.get("title"), str) or not isinstance(course.get("description"), str):
+        return create_error_response(400, "Invalid input data", "/courses")
+    
     with open(DATA_FILE, 'r') as f:
         courses = json.load(f)
     
-    id = str(uuid.uuid4())
-    courses[id] = {"id": id, "title": course.title, "description": course.description}
+    course_id = str(uuid.uuid4())
+    new_course = {"id": course_id, "title": course["title"], "description": course["description"]}
+    courses[course_id] = new_course
 
     with open(DATA_FILE, 'w') as f:
         json.dump(courses, f)
 
-    return {"message": "Course created", "data": courses[id]}
+    return {"data": new_course}
 
-@app.get("/courses")
+# Ruta para obtener todos los cursos
+@app.get("/courses", response_model=Dict[str, Any], responses={
+    200: {
+        "description": "A list of courses",
+        "content": {
+            "application/json": {
+                "example": {
+                    "data": [
+                        {
+                            "id": 0,
+                            "title": "string",
+                            "description": "string"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+})
+
 def get_courses():
     with open(DATA_FILE, 'r') as f:
         courses = json.load(f)
     return {"data": list(courses.values())}
 
-@app.get("/courses/{id}")
+# Ruta para obtener un curso por ID
+@app.get("/courses/{id}", status_code= 200, response_model=CourseResponse, responses={
+    200: {
+        "description": "Course created successfully",
+        "content": {
+            "application/json": {
+                "example": {
+                    "data": {
+                        "id": 0,
+                        "title": "string",
+                        "description": "string"
+                    }
+                }
+            }
+        }
+    },
+    404: {
+        "description": "Course not found",
+        "content": {
+            "application/json": {
+                "example": {
+                    "type": "about:blank",
+                    "title": "Course Not Found",
+                    "status": 404,
+                    "detail": "The course with ID 12345 was not found.",
+                    "instance": "/courses/12345"
+                }
+            }
+        }
+    }
+})
 def get_course(id: str):
     with open(DATA_FILE, 'r') as f:
         courses = json.load(f)
     
     course = courses.get(id)
     if not course:
-        raise HTTPException(
-            status_code=404,
-            detail="The course with ID {} was not found.".format(id),
-            headers={"X-Error": "Course not found"}
-        )
+        return create_error_response(404, f"The course with ID {id} was not found.", f"/courses/{id}")
     return {"data": course}
 
-@app.delete("/courses/{id}")
+# Ruta para eliminar un curso por ID
+@app.delete("/courses/{id}", status_code = 204, responses={
+    204: {
+        "description": "Course deleted successfully"
+    },
+    404: {
+        "description": "Course not found",
+        "content": {
+            "application/json": {
+                "example": {
+                    "type": "about:blank",
+                    "title": "Course Not Found",
+                    "status": 404,
+                    "detail": "The course with ID 12345 was not found.",
+                    "instance": "/courses/12345"
+                }
+            }
+        }
+    }
+})
 def delete_course(id: str):
     with open(DATA_FILE, 'r') as f:
         courses = json.load(f)
     
     course = courses.pop(id, None)
     if not course:
-        raise HTTPException(
-            status_code=404,
-            detail="The course with ID {} was not found.".format(id),
-            headers={"X-Error": "Course not found"}
-        )
+        return create_error_response(404, f"The course with ID {id} was not found.", f"/courses/{id}")
     
     with open(DATA_FILE, 'w') as f:
         json.dump(courses, f)
