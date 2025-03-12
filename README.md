@@ -3,7 +3,7 @@
 
 ## 📖 Introducción
 
-Este proyecto es una API RESTful desarrollada con **FastAPI** en Python. La API permite gestionar "cursos" de manera sencilla utilizando almacenamiento en memoria.
+Este proyecto es una API RESTful desarrollada con **FastAPI** en Python. La API permite gestionar cursos de manera sencilla utilizando almacenamiento en memoria.
 
 ---
 
@@ -56,10 +56,22 @@ Actualmente, la API almacena los datos en un archivo JSON dentro del contenedor.
 
 ## 🧪 Testing
 
-Aún no se han implementado pruebas automáticas. Una vez agregadas, se proporcionará el link a la herramienta utilizada para testear la API.
+### Pruebas Automáticas
+
+Para ejecutar las pruebas automáticas, usa el siguiente comando:
+```sh
+docker-compose run --rm tests
+```
+
+### Pruebas Manuales
 
 Para probar manualmente los endpoints, usa **Swagger UI** en:
 ```sh
 http://localhost:8080/docs
 ```
 
+### Herramienta de Testing
+
+Para más información sobre la herramienta de testing utilizada, visita el [repositorio de pytest](https://github.com/pytest-dev/pytest).
+
+---
