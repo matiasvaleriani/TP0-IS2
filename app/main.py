@@ -1,8 +1,38 @@
-from fastapi import FastAPI
 from app.routes import router
 from app.utils import ensure_data_file_exists
+from .utils import create_rfc7807_error_response
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
+
 
 app = FastAPI()
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    return create_rfc7807_error_response(
+        status_code=exc.status_code,
+        title=exc.detail.split('.')[0],
+        detail=exc.detail,
+        instance=str(request.url)
+    )
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    return create_rfc7807_error_response(
+        status_code=500,
+        title="Internal Server Error",
+        detail="An unexpected error occurred.",
+        instance=str(request.url)
+    )
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return create_rfc7807_error_response(
+        status_code=422,
+        title="Validation Error",
+        detail=str(exc),
+        instance=str(request.url)
+    )
 
 '''
 Ensure the data file exists before the application starts.

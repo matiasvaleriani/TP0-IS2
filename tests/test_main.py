@@ -5,20 +5,6 @@ import os
 import json
 
 client = TestClient(app)
-DATA_FILE = os.getenv("DATA_FILE", "/app/data/courses.json")
-
-@pytest.fixture(autouse=True)
-def clean_data_file():
-    """
-    Cleans the data file before and after each test to ensure a fresh environment.
-    """
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, 'w') as f:
-            json.dump({}, f)
-    yield
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, 'w') as f:
-            json.dump({}, f)
 
 def test_create_course():
     """
@@ -29,6 +15,11 @@ def test_create_course():
     assert response.status_code == 201
     assert response.json()["data"]["title"] == "Test Course"
     assert response.json()["data"]["description"] == "This is a test course description."
+
+    # Clean up: delete the created course
+    course_id = response.json()["data"]["id"]
+    delete_response = client.delete(f"/courses/{course_id}")
+    assert delete_response.status_code == 204
 
 def test_get_courses():
     """
@@ -51,6 +42,10 @@ def test_get_course():
     response = client.get(f"/courses/{course_id}")
     assert response.status_code == 200
     assert response.json()["data"]["id"] == course_id
+
+    # Clean up: delete the created course
+    delete_response = client.delete(f"/courses/{course_id}")
+    assert delete_response.status_code == 204
 
 def test_delete_course():
     """

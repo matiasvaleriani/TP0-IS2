@@ -6,21 +6,6 @@ from fastapi.responses import JSONResponse
 load_dotenv()
 DATA_FILE = os.getenv("DATA_FILE", "/app/data/courses.json")
 
-def create_error_response(status_code: int, title: str, detail: str, instance: str):
-    """
-    Returns a JSON error response following RFC 7807 format.
-    """
-    return JSONResponse(
-        status_code=status_code,
-        content={
-            "type": "about:blank",
-            "title": title,
-            "status": status_code,
-            "detail": detail,
-            "instance": instance
-        }
-    )
-
 def load_courses():
     """
     Loads courses from the JSON data file.
@@ -43,3 +28,16 @@ def ensure_data_file_exists():
         os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
         with open(DATA_FILE, 'w') as f:
             json.dump({}, f)
+
+def create_rfc7807_error_response(status_code: int, title: str, detail: str, instance: str):
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            
+            "type": "about:blank",
+            "title": title,
+            "status": status_code,
+            "detail": detail,
+            "instance": instance
+        }
+    )
