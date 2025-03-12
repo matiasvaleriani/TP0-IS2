@@ -33,7 +33,6 @@ def create_rfc7807_error_response(status_code: int, title: str, detail: str, ins
     return JSONResponse(
         status_code=status_code,
         content={
-            
             "type": "about:blank",
             "title": title,
             "status": status_code,

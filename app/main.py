@@ -7,6 +7,7 @@ from fastapi.exceptions import RequestValidationError
 
 app = FastAPI()
 
+#Handler to catch HTTPExceptions and return a JSON response with the RFC7807 format
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
     return create_rfc7807_error_response(
@@ -16,6 +17,7 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         instance=str(request.url)
     )
 
+#Handler to catch general exceptions and return a JSON response with the RFC7807 format
 @app.exception_handler(Exception)
 async def general_exception_handler(request: Request, exc: Exception):
     return create_rfc7807_error_response(
@@ -25,6 +27,8 @@ async def general_exception_handler(request: Request, exc: Exception):
         instance=str(request.url)
     )
 
+#Handler to catch RequestValidationErrors and return a JSON response with the RFC7807 format.
+#For example, when a request is made with invalid data types.
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     return create_rfc7807_error_response(

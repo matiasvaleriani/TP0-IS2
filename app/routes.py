@@ -5,7 +5,7 @@ import json
 import os
 from dotenv import load_dotenv
 
-from app.utils import ensure_data_file_exists
+from app.utils import ensure_data_file_exists, load_courses, save_courses
 from .models import CourseResponse, CourseCreate
 from fastapi import HTTPException
 
@@ -19,7 +19,6 @@ PORT = int(os.getenv("PORT", 8080))
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 DATA_FILE = os.getenv("DATA_FILE", "/app/data/courses.json")
 
-# Verify that the data file exists
 ensure_data_file_exists()
 
 @router.post("/courses", status_code=201, response_model=CourseResponse)
@@ -31,15 +30,13 @@ def create_course(course: CourseCreate):
         if not isinstance(course.title, str) or not isinstance(course.description, str):
             raise HTTPException(status_code=400, detail="Invalid input data")
         
-        with open(DATA_FILE, 'r') as f:
-            courses = json.load(f)
+        courses = load_courses()
         
         course_id = str(uuid.uuid4())
         new_course = {"id": course_id, "title": course.title, "description": course.description}
         courses[course_id] = new_course
 
-        with open(DATA_FILE, 'w') as f:
-            json.dump(courses, f)
+        save_courses(courses)
 
         return {"data": new_course}
     except HTTPException as e:
@@ -53,8 +50,7 @@ def get_courses():
     Retrieve a list of all courses.
     """
     try:
-        with open(DATA_FILE, 'r') as f:
-            courses = json.load(f)
+        courses = load_courses()
         return {"data": list(courses.values())}
     except Exception as e:
         raise HTTPException(status_code=500, detail="An unexpected error occurred.")
@@ -65,8 +61,7 @@ def get_course(id: str):
     Retrieve a specific course by its ID.
     """
     try:
-        with open(DATA_FILE, 'r') as f:
-            courses = json.load(f)
+        courses = load_courses()
         
         course = courses.get(id)
         if not course:
@@ -85,15 +80,13 @@ def delete_course(id: str):
     Delete a specific course by its ID.
     """
     try:
-        with open(DATA_FILE, 'r') as f:
-            courses = json.load(f)
+        courses = load_courses()
         
         course = courses.pop(id, None)
         if not course:
             raise HTTPException(status_code=404, detail=f"The course with ID {id} was not found.")
         
-        with open(DATA_FILE, 'w') as f:
-            json.dump(courses, f)
+        save_courses(courses)
 
         return {"message": "Course deleted successfully"}
     except HTTPException as e:
