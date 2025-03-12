@@ -1,18 +1,29 @@
 # 📌 Trabajo Practico Individual Ingenieria de Software II
 
+## 📚 Tabla de Contenidos
+
+1. [Introducción](#📖-introducción)
+2. [Desafíos del Proyecto](#🚀-desafíos-del-proyecto)
+3. [Pre-requisitos](#🔧-pre-requisitos)
+4. [Construcción y Ejecución con Docker](#🐳-construcción-y-ejecución-con-docker)
+5. [Base de Datos](#🗄️-base-de-datos)
+6. [Testing](#🧪-testing)
 
 ## 📖 Introducción
 
-Este proyecto es una API RESTful desarrollada con **FastAPI** en Python. La API permite gestionar cursos de manera sencilla utilizando almacenamiento en memoria.
+Este proyecto consiste en una API RESTful desarrollada con FastAPI en Python, cuyo propósito es permitir la gestión de cursos dentro de la plataforma ClassConnect. La API proporciona funcionalidades para crear, visualizar y eliminar cursos, utilizando una estructura de almacenamiento en memoria. Se implementaron las mejores prácticas en cuanto a manejo de errores siguiendo el estándar RFC 7807, ejecución dentro de un entorno Dockerizado, y pruebas automáticas con pytest para garantizar la calidad del software.
 
 ---
 
 ## 🚀 Desafíos del Proyecto
 
-Hasta el momento, los principales desafíos han sido:
+Durante el desarrollo del proyecto, se presentaron varios desafíos técnicos y conceptuales:
+
 - Configuración y ejecución correcta de Docker.
 - Manejo de variables de entorno con `.env`.
 - Exposición y prueba de los endpoints de FastAPI.
+- Persistencia en Memoria.
+- Pruebas Automatizadas: Se crearon pruebas utilizando pytest y httpx para validar el correcto funcionamiento de los endpoints, incluyendo pruebas de casos válidos e inválidos.
 
 ---
 
@@ -72,6 +83,6 @@ http://localhost:8080/docs
 
 ### Herramienta de Testing
 
-Para más información sobre la herramienta de testing utilizada, visita el [repositorio de pytest](https://github.com/pytest-dev/pytest).
+Para más información sobre la herramienta de testing utilizada, visita el [repositorio de pytest](https://github.com/pytest-dev/pytest) o la [pagina oficial](https://docs.pytest.org/en/stable/)
 
 ---
