@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Body
+from fastapi import APIRouter
 from typing import Dict, Any
 import uuid
 import json
 import os
 from dotenv import load_dotenv
-from .models import CourseResponse
+from .models import CourseResponse, CourseCreate
 from .utils import create_error_response
 
 # This is to to modularize our route definitions, improving code organization and maintainability. 
@@ -56,15 +56,16 @@ if not os.path.exists(DATA_FILE):
         }
     }
 })
-def create_course(course: Dict[str, Any] = Body(..., example={"title": "string", "description": "string"})):
-    if not isinstance(course.get("title"), str) or not isinstance(course.get("description"), str):
+
+def create_course(course: CourseCreate):
+    if not isinstance(course.title, str) or not isinstance(course.description, str):
         return create_error_response(400, "Invalid input data", "/courses")
     
     with open(DATA_FILE, 'r') as f:
         courses = json.load(f)
     
     course_id = str(uuid.uuid4())
-    new_course = {"id": course_id, "title": course["title"], "description": course["description"]}
+    new_course = {"id": course_id, "title": course.title, "description": course.description}
     courses[course_id] = new_course
 
     with open(DATA_FILE, 'w') as f:
