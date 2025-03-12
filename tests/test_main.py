@@ -16,7 +16,7 @@ def test_create_course():
     assert response.json()["data"]["title"] == "Test Course"
     assert response.json()["data"]["description"] == "This is a test course description."
 
-    # Clean up: delete the created course
+    # Clean up
     course_id = response.json()["data"]["id"]
     delete_response = client.delete(f"/courses/{course_id}")
     assert delete_response.status_code == 204
@@ -43,7 +43,7 @@ def test_get_course():
     assert response.status_code == 200
     assert response.json()["data"]["id"] == course_id
 
-    # Clean up: delete the created course
+    # Clean up
     delete_response = client.delete(f"/courses/{course_id}")
     assert delete_response.status_code == 204
 
