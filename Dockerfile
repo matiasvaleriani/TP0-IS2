@@ -1,20 +1,20 @@
-# Usa una imagen base de Python
+# Use a base Python image
 FROM python:3.11
 
-# Configura el directorio de trabajo en el contenedor
+# Set the working directory in the container
 WORKDIR /app
 
-# Copia los archivos necesarios
+# Copy the necessary files
 COPY requirements.txt .env ./
 
-# Instala las dependencias
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia el código de la aplicación
+# Copy the application code
 COPY . .
 
-# Expone el puerto 8080
+# Expose port 8080
 EXPOSE ${PORT:-8080}
 
-# Comando por defecto para ejecutar la aplicación
+# Default command to run the application
 CMD ["sh", "-c", "uvicorn app.main:app --host ${HOST:-0.0.0.0} --port ${PORT:-8080}"]

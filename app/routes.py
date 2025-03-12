@@ -58,6 +58,9 @@ if not os.path.exists(DATA_FILE):
 })
 
 def create_course(course: CourseCreate):
+    """
+    Create a new course with the given title and description.
+    """
     if not isinstance(course.title, str) or not isinstance(course.description, str):
         return create_error_response(400, "Invalid input data", "/courses")
     
@@ -92,6 +95,9 @@ def create_course(course: CourseCreate):
     }
 })
 def get_courses():
+    """
+    Retrieve a list of all courses.
+    """
     with open(DATA_FILE, 'r') as f:
         courses = json.load(f)
     return {"data": list(courses.values())}
@@ -142,6 +148,9 @@ def get_courses():
 })
 
 def get_course(id: str):
+    """
+    Retrieve a specific course by its ID.
+    """
     try:
         with open(DATA_FILE, 'r') as f:
             courses = json.load(f)
@@ -188,6 +197,9 @@ def get_course(id: str):
 })
 
 def delete_course(id: str):
+    """
+    Delete a specific course by its ID.
+    """
     try:
         with open(DATA_FILE, 'r') as f:
             courses = json.load(f)

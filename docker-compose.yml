@@ -1,4 +1,3 @@
-
 services:
   app:
     build: .
@@ -7,7 +6,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./data:/app/data  # Mapea la carpeta local 'data' a la carpeta '/app/data' del contenedor
+      - ./data:/app/data 
     restart: always
     command: ["sh", "-c", "uvicorn app.main:app --host ${HOST:-0.0.0.0} --port ${PORT:-8080}"]
 
@@ -16,7 +15,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./data:/app/data  # Mapea la carpeta local 'data' a la carpeta '/app/data' del contenedor
+      - ./data:/app/data 
     working_dir: /app
     environment:
       - PYTHONPATH=/app

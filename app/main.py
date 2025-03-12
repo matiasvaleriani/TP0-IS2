@@ -4,8 +4,12 @@ from app.utils import ensure_data_file_exists
 
 app = FastAPI()
 
-# Asegurarse de que el archivo de datos exista
+'''
+Ensure the data file exists before the application starts.
+'''
 ensure_data_file_exists()
 
-# Incluir las rutas
+'''
+Include the routes defined in the router.
+'''
 app.include_router(router)
