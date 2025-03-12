@@ -1,88 +1,88 @@
-# 📌 Trabajo Practico Individual Ingenieria de Software II
+# 📌 Individual Practical Work Software Engineering II
 
-## 📚 Tabla de Contenidos
+## 📚 Table of Contents
 
-1. [Introducción](#📖-introducción)
-2. [Desafíos del Proyecto](#🚀-desafíos-del-proyecto)
-3. [Pre-requisitos](#🔧-pre-requisitos)
-4. [Construcción y Ejecución con Docker](#🐳-construcción-y-ejecución-con-docker)
-5. [Base de Datos](#🗄️-base-de-datos)
+1. [Introduction](#📖-introduction)
+2. [Project Challenges](#🚀-project-challenges)
+3. [Prerequisites](#🔧-prerequisites)
+4. [Building and Running with Docker](#🐳-building-and-running-with-docker)
+5. [Database](#🗄️-database)
 6. [Testing](#🧪-testing)
 
-## 📖 Introducción
+## 📖 Introduction
 
-Este proyecto consiste en una API RESTful desarrollada con FastAPI en Python, cuyo propósito es permitir la gestión de cursos dentro de la plataforma ClassConnect. La API proporciona funcionalidades para crear, visualizar y eliminar cursos, utilizando una estructura de almacenamiento en memoria. Se implementaron las mejores prácticas en cuanto a manejo de errores siguiendo el estándar RFC 7807, ejecución dentro de un entorno Dockerizado, y pruebas automáticas con pytest para garantizar la calidad del software.
-
----
-
-## 🚀 Desafíos del Proyecto
-
-Durante el desarrollo del proyecto, se presentaron varios desafíos técnicos y conceptuales:
-
-- Configuración y ejecución correcta de Docker.
-- Manejo de variables de entorno con `.env`.
-- Exposición y prueba de los endpoints de FastAPI.
-- Persistencia en Memoria.
-- Pruebas Automatizadas: Se crearon pruebas utilizando pytest y httpx para validar el correcto funcionamiento de los endpoints, incluyendo pruebas de casos válidos e inválidos.
+This project consists of a RESTful API developed with FastAPI in Python, aimed at managing courses within the ClassConnect platform. The API provides functionalities to create, view, and delete courses, using an in-memory storage structure. Best practices were implemented regarding error handling following the RFC 7807 standard, execution within a Dockerized environment, and automated testing with pytest to ensure software quality.
 
 ---
 
-## 🔧 Pre-requisitos
+## 🚀 Project Challenges
 
-Antes de ejecutar el proyecto, asegúrate de tener instalado:
+During the development of the project, several technical and conceptual challenges were encountered:
+
+- Correct configuration and execution of Docker.
+- Handling environment variables with `.env`.
+- Exposing and testing FastAPI endpoints.
+- In-Memory Persistence.
+- Automated Testing: Tests were created using pytest and httpx to validate the correct functioning of the endpoints, including tests for valid and invalid cases.
+
+---
+
+## 🔧 Prerequisites
+
+Before running the project, make sure you have installed:
 
 - **Python 3.11**
-- **Docker** y **Docker Compose**
+- **Docker** and **Docker Compose**
 
-Si deseas probar los endpoints de la API, puedes utilizar **Swagger UI**, que se encuentra en `http://localhost:8080/docs`.
+If you want to test the API endpoints, you can use **Swagger UI**, which is available at `http://localhost:8080/docs`.
 
 ---
 
-## 🐳 Construcción y Ejecución con Docker
+## 🐳 Building and Running with Docker
 
-Para construir y ejecutar la imagen de Docker utilizando Docker Compose, sigue estos pasos:
+To build and run the Docker image using Docker Compose, follow these steps:
 
-### 1️⃣ Construir y levantar el contenedor
+### 1️⃣ Build and start the container
 ```sh
 docker-compose up --build -d
 ```
 
-### 2️⃣ Verificar que el contenedor esté corriendo
+### 2️⃣ Verify that the container is running
 ```sh
- docker ps
+docker ps
 ```
 
-### 3️⃣ Detener y eliminar el contenedor
+### 3️⃣ Stop and remove the container
 ```sh
- docker-compose down
+docker-compose down
 ```
 
 ---
 
-## 🗄️ Base de Datos
+## 🗄️ Database
 
-Actualmente, la API almacena los datos en un archivo JSON dentro del contenedor. Los datos se persisten en la carpeta data en el directorio del proyecto, lo que asegura que los datos se mantengan entre reinicios del contenedor.
+Currently, the API stores data in a JSON file within the container. The data is persisted in the `data` folder in the project directory, ensuring that the data is retained between container restarts.
 
 ---
 
 ## 🧪 Testing
 
-### Pruebas Automáticas
+### Automated Tests
 
-Para ejecutar las pruebas automáticas, usa el siguiente comando:
+To run the automated tests, use the following command:
 ```sh
 docker-compose run --rm tests
 ```
 
-### Pruebas Manuales
+### Manual Tests
 
-Para probar manualmente los endpoints, usa **Swagger UI** en:
+To manually test the endpoints, use **Swagger UI** at:
 ```sh
 http://localhost:8080/docs
 ```
 
-### Herramienta de Testing
+### Testing Tool
 
-Para más información sobre la herramienta de testing utilizada, visita el [repositorio de pytest](https://github.com/pytest-dev/pytest) o la [pagina oficial](https://docs.pytest.org/en/stable/)
+For more information about the testing tool used, visit the [pytest repository](https://github.com/pytest-dev/pytest) or the [official page](https://docs.pytest.org/en/stable/).
 
 ---
