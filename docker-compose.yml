@@ -7,14 +7,8 @@ services:
       - .env
     volumes:
       - ./data:/app/data 
-      - ./logs:/app/logs  # Montar el volumen paara los logs
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+      - ./logs:/app/logs 
     restart: always
-    command: ["sh", "-c", "uvicorn app.main:app --host ${HOST:-0.0.0.0} --port ${PORT:-8080}"]
 
   tests:
     build: .
