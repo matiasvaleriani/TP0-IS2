@@ -9,7 +9,7 @@ from app.utils import ensure_data_file_exists, load_courses, save_courses
 from .models import CourseResponse, CourseCreate
 from fastapi import HTTPException
 
-# This is to to modularize our route definitions, improving code organization and maintainability. 
+# This is to to modularize our route definitions, improving code organization and maintainability.
 # This approach allows us to separate route logic into different files, making the codebase cleaner and easier to manage.
 router = APIRouter()
 
@@ -21,6 +21,7 @@ DATA_FILE = os.getenv("DATA_FILE", "/app/data/courses.json")
 
 ensure_data_file_exists()
 
+
 @router.post("/courses", status_code=201, response_model=CourseResponse)
 def create_course(course: CourseCreate):
     """
@@ -29,11 +30,15 @@ def create_course(course: CourseCreate):
     try:
         if not isinstance(course.title, str) or not isinstance(course.description, str):
             raise HTTPException(status_code=400, detail="Invalid input data")
-        
+
         courses = load_courses()
-        
+
         course_id = str(uuid.uuid4())
-        new_course = {"id": course_id, "title": course.title, "description": course.description}
+        new_course = {
+            "id": course_id,
+            "title": course.title,
+            "description": course.description,
+        }
         courses[course_id] = new_course
 
         save_courses(courses)
@@ -43,6 +48,7 @@ def create_course(course: CourseCreate):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="An unexpected error occurred.")
+
 
 @router.get("/courses", response_model=Dict[str, Any])
 def get_courses():
@@ -55,6 +61,7 @@ def get_courses():
     except Exception as e:
         raise HTTPException(status_code=500, detail="An unexpected error occurred.")
 
+
 @router.get("/courses/{id}", status_code=200, response_model=CourseResponse)
 def get_course(id: str):
     """
@@ -62,17 +69,19 @@ def get_course(id: str):
     """
     try:
         courses = load_courses()
-        
+
         course = courses.get(id)
         if not course:
-            raise HTTPException(status_code=404, detail=f"The course with ID {id} was not found.")
-        
+            raise HTTPException(
+                status_code=404, detail=f"The course with ID {id} was not found."
+            )
+
         return {"data": course}
     except HTTPException as e:
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail="An unexpected error occurred.")
-    
+
 
 @router.delete("/courses/{id}", status_code=204)
 def delete_course(id: str):
@@ -81,11 +90,13 @@ def delete_course(id: str):
     """
     try:
         courses = load_courses()
-        
+
         course = courses.pop(id, None)
         if not course:
-            raise HTTPException(status_code=404, detail=f"The course with ID {id} was not found.")
-        
+            raise HTTPException(
+                status_code=404, detail=f"The course with ID {id} was not found."
+            )
+
         save_courses(courses)
 
         return {"message": "Course deleted successfully"}
