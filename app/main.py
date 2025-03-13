@@ -1,5 +1,5 @@
 from app.routes import router
-from app.utils import ensure_data_file_exists, create_rfc7807_error_response
+from app.utils import create_rfc7807_error_response
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from app.logging_config import get_logger
@@ -45,11 +45,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         instance=str(request.url),
     )
 
-
-"""
-Ensure the data file exists before the application starts.
-"""
-ensure_data_file_exists()
 
 """
 Include the routes defined in the router.

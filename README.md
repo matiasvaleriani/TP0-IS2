@@ -12,7 +12,7 @@
 
 ## 📖 Introduction
 
-This project consists of a RESTful API developed with FastAPI in Python, aimed at managing courses within the ClassConnect platform. The API provides functionalities to create, view, and delete courses, using an in-memory storage structure. Best practices were implemented regarding error handling following the RFC 7807 standard, execution within a Dockerized environment, and automated testing with pytest to ensure software quality.
+This project consists of a RESTful API developed with FastAPI in Python, aimed at managing courses within the ClassConnect platform. The API provides functionalities to create, view, and delete courses, using MongoDB for data storage. Best practices were implemented regarding error handling following the RFC 7807 standard, execution within a Dockerized environment, and automated testing with pytest to ensure software quality.
 
 ---
 
@@ -23,7 +23,7 @@ During the development of the project, several technical and conceptual challeng
 - Correct configuration and execution of Docker.
 - Handling environment variables with `.env`.
 - Exposing and testing FastAPI endpoints.
-- In-Memory Persistence.
+- Using MongoDB for data persistence.
 - Automated Testing: Tests were created using pytest and httpx to validate the correct functioning of the endpoints, including tests for valid and invalid cases.
 
 ---
@@ -62,7 +62,7 @@ docker-compose down
 
 ## 🗄️ Database
 
-Currently, the API stores data in a JSON file within the container. The data is persisted in the `data` folder in the project directory, ensuring that the data is retained between container restarts.
+Currently, the API uses MongoDB as the database. The data is stored in the `data` folder in the project directory, ensuring that the data is retained between container restarts.
 
 ---
 
@@ -72,7 +72,7 @@ Currently, the API stores data in a JSON file within the container. The data is 
 
 To run the automated tests, use the following command:
 ```sh
-docker-compose run --rm tests
+docker-compose run --rm app sh -c "PYTHONPATH=/app pytest"
 ```
 
 ### Manual Tests

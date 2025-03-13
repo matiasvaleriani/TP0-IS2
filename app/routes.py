@@ -1,56 +1,57 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from typing import Dict, Any
-import uuid
-import json
 import os
 from dotenv import load_dotenv
-from loguru import logger # type: ignore
-
-from app.utils import ensure_data_file_exists, load_courses, save_courses
+from loguru import logger  # type: ignore
+from pymongo.errors import PyMongoError  # type: ignore
+import uuid
+from app.utils import get_courses_collection
 from .models import CourseResponse, CourseCreate
-from fastapi import HTTPException
 
-# This is to to modularize our route definitions, improving code organization and maintainability.
-# This approach allows us to separate route logic into different files, making the codebase cleaner and easier to manage.
 router = APIRouter()
 
 load_dotenv()
 HOST = os.getenv("HOST", "127.0.0.1")
 PORT = int(os.getenv("PORT", 8080))
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
-DATA_FILE = os.getenv("DATA_FILE", "/app/data/courses.json")
-
-ensure_data_file_exists()
 
 
 @router.post("/courses", status_code=201, response_model=CourseResponse)
 def create_course(course: CourseCreate):
     """
-    Create a new course with the given title and description.
+    Create a new course.
+
+    Parameters:
+        - course (CourseCreate): Contains title (str) and description (str).
+
+    Returns:
+        - 201 Created: The created course with its ID.
+        - 400 Bad Request: If input data is invalid.
+        - 500 Internal Server Error: If a database error occurs.
     """
     try:
-        logger.info("Creating a new course with title: {}", course.title)
         if not isinstance(course.title, str) or not isinstance(course.description, str):
             logger.error("Invalid input data: {}", course)
             raise HTTPException(status_code=400, detail="Invalid input data")
 
-        courses = load_courses()
+        courses_collection = get_courses_collection()
 
         course_id = str(uuid.uuid4())
         new_course = {
-            "id": course_id,
+            "_id": course_id,
             "title": course.title,
             "description": course.description,
         }
-        courses[course_id] = new_course
-
-        save_courses(courses)
+        courses_collection.insert_one(new_course)
 
         logger.info("Course created successfully with ID: {}", course_id)
         return {"data": new_course}
-    except HTTPException as e:
-        logger.error("HTTPException: {}", e.detail)
-        raise e
+    except PyMongoError as e:
+        logger.exception("An error occurred while interacting with the database.")
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while interacting with the database.",
+        )
     except Exception as e:
         logger.exception("An unexpected error occurred.")
         raise HTTPException(status_code=500, detail="An unexpected error occurred.")
@@ -59,12 +60,25 @@ def create_course(course: CourseCreate):
 @router.get("/courses", response_model=Dict[str, Any])
 def get_courses():
     """
-    Recuperar una lista de todos los cursos.
+    Retrieve all courses.
+
+    Returns:
+        - 200 OK: A list of all courses.
+        - 500 Internal Server Error: If a database error occurs.
     """
     try:
         logger.info("Retrieving all courses")
-        courses = load_courses()
-        return {"data": list(courses.values())}
+        courses_collection = get_courses_collection()
+        courses = list(courses_collection.find({}))
+        for course in courses:
+            course["_id"] = str(course["_id"])
+        return {"data": courses}
+    except PyMongoError as e:
+        logger.exception("An error occurred while interacting with the database.")
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while interacting with the database.",
+        )
     except Exception as e:
         logger.exception("An unexpected error occurred.")
         raise HTTPException(status_code=500, detail="An unexpected error occurred.")
@@ -73,22 +87,34 @@ def get_courses():
 @router.get("/courses/{id}", status_code=200, response_model=CourseResponse)
 def get_course(id: str):
     """
-    Recuperar un curso específico por su ID.
+    Retrieve a specific course by its ID.
+
+    Parameters:
+        - id (str): The unique identifier of the course.
+
+    Returns:
+        - 200 OK: The requested course.
+        - 404 Not Found: If the course does not exist.
+        - 500 Internal Server Error: If a database error occurs.
     """
+
     try:
         logger.info("Retrieving course with ID: {}", id)
-        courses = load_courses()
-
-        course = courses.get(id)
+        courses_collection = get_courses_collection()
+        course = courses_collection.find_one({"_id": id})
         if not course:
-            logger.warning("Course with ID {} not found", id)
             raise HTTPException(
                 status_code=404, detail=f"The course with ID {id} was not found."
             )
-
+        course["_id"] = str(course["_id"])
         return {"data": course}
+    except PyMongoError as e:
+        logger.exception("An error occurred while interacting with the database.")
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while interacting with the database.",
+        )
     except HTTPException as e:
-        logger.error("HTTPException: {}", e.detail)
         raise e
     except Exception as e:
         logger.exception("An unexpected error occurred.")
@@ -98,25 +124,32 @@ def get_course(id: str):
 @router.delete("/courses/{id}", status_code=204)
 def delete_course(id: str):
     """
-    Eliminar un curso específico por su ID.
+    Delete a specific course by its ID.
+
+    Parameters:
+        - id (str): The unique identifier of the course.
+
+    Returns:
+        - 204 No Content: If the course was deleted successfully.
+        - 404 Not Found: If the course does not exist.
+        - 500 Internal Server Error: If a database error occurs.
     """
     try:
-        logger.info("Deleting course with ID: {}", id)
-        courses = load_courses()
-
-        course = courses.pop(id, None)
-        if not course:
-            logger.warning("Course with ID {} not found", id)
+        courses_collection = get_courses_collection()
+        result = courses_collection.delete_one({"_id": id})
+        if result.deleted_count == 0:
             raise HTTPException(
                 status_code=404, detail=f"The course with ID {id} was not found."
             )
-
-        save_courses(courses)
-
         logger.info("Course with ID {} deleted successfully", id)
         return {"message": "Course deleted successfully"}
+    except PyMongoError as e:
+        logger.exception("An error occurred while interacting with the database.")
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while interacting with the database.",
+        )
     except HTTPException as e:
-        logger.error("HTTPException: {}", e.detail)
         raise e
     except Exception as e:
         logger.exception("An unexpected error occurred.")
