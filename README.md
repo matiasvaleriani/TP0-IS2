@@ -1,4 +1,4 @@
-# 📌 Individual Practical Work Software Engineering II
+# 📌 Individual - Software Engineering II
 
 ## 📚 Table of Contents
 
