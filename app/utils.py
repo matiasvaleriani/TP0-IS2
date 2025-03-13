@@ -2,7 +2,7 @@ import json
 import os
 from dotenv import load_dotenv
 from fastapi.responses import JSONResponse
-from pymongo import MongoClient
+from pymongo import MongoClient  # type: ignore
 
 
 load_dotenv()

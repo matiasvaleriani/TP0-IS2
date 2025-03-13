@@ -34,6 +34,7 @@ Before running the project, make sure you have installed:
 
 - **Python 3.11**
 - **Docker** and **Docker Compose**
+- Optional: **MongoDB Compass**
 
 If you want to test the API endpoints, you can use **Swagger UI**, which is available at `http://localhost:8080/docs`.
 
@@ -63,6 +64,16 @@ docker-compose down
 ## 🗄️ Database
 
 Currently, the API uses MongoDB as the database. The data is stored in the `data` folder in the project directory, ensuring that the data is retained between container restarts.
+
+To view the database, you can use MongoDB Compass:
+
+1. **Download and install MongoDB Compass** from [here](https://www.mongodb.com/try/download/compass).
+2. **Open MongoDB Compass**.
+3. **Connect to your MongoDB instance** by entering the following connection string:
+```sh
+mongodb://localhost:27017
+```
+4. **Click "Connect".**
 
 ---
 
