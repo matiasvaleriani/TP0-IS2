@@ -4,6 +4,7 @@ import uuid
 import json
 import os
 from dotenv import load_dotenv
+from loguru import logger
 
 from app.utils import ensure_data_file_exists, load_courses, save_courses
 from .models import CourseResponse, CourseCreate
@@ -28,7 +29,9 @@ def create_course(course: CourseCreate):
     Create a new course with the given title and description.
     """
     try:
+        logger.info("Creating a new course with title: {}", course.title)
         if not isinstance(course.title, str) or not isinstance(course.description, str):
+            logger.error("Invalid input data: {}", course)
             raise HTTPException(status_code=400, detail="Invalid input data")
 
         courses = load_courses()
@@ -43,64 +46,78 @@ def create_course(course: CourseCreate):
 
         save_courses(courses)
 
+        logger.info("Course created successfully with ID: {}", course_id)
         return {"data": new_course}
     except HTTPException as e:
+        logger.error("HTTPException: {}", e.detail)
         raise e
     except Exception as e:
+        logger.exception("An unexpected error occurred.")
         raise HTTPException(status_code=500, detail="An unexpected error occurred.")
 
 
 @router.get("/courses", response_model=Dict[str, Any])
 def get_courses():
     """
-    Retrieve a list of all courses.
+    Recuperar una lista de todos los cursos.
     """
     try:
+        logger.info("Retrieving all courses")
         courses = load_courses()
         return {"data": list(courses.values())}
     except Exception as e:
+        logger.exception("An unexpected error occurred.")
         raise HTTPException(status_code=500, detail="An unexpected error occurred.")
 
 
 @router.get("/courses/{id}", status_code=200, response_model=CourseResponse)
 def get_course(id: str):
     """
-    Retrieve a specific course by its ID.
+    Recuperar un curso específico por su ID.
     """
     try:
+        logger.info("Retrieving course with ID: {}", id)
         courses = load_courses()
 
         course = courses.get(id)
         if not course:
+            logger.warning("Course with ID {} not found", id)
             raise HTTPException(
                 status_code=404, detail=f"The course with ID {id} was not found."
             )
 
         return {"data": course}
     except HTTPException as e:
+        logger.error("HTTPException: {}", e.detail)
         raise e
     except Exception as e:
+        logger.exception("An unexpected error occurred.")
         raise HTTPException(status_code=500, detail="An unexpected error occurred.")
 
 
 @router.delete("/courses/{id}", status_code=204)
 def delete_course(id: str):
     """
-    Delete a specific course by its ID.
+    Eliminar un curso específico por su ID.
     """
     try:
+        logger.info("Deleting course with ID: {}", id)
         courses = load_courses()
 
         course = courses.pop(id, None)
         if not course:
+            logger.warning("Course with ID {} not found", id)
             raise HTTPException(
                 status_code=404, detail=f"The course with ID {id} was not found."
             )
 
         save_courses(courses)
 
+        logger.info("Course with ID {} deleted successfully", id)
         return {"message": "Course deleted successfully"}
     except HTTPException as e:
+        logger.error("HTTPException: {}", e.detail)
         raise e
     except Exception as e:
+        logger.exception("An unexpected error occurred.")
         raise HTTPException(status_code=500, detail="An unexpected error occurred.")

@@ -1,9 +1,10 @@
 from app.routes import router
-from app.utils import ensure_data_file_exists
-from .utils import create_rfc7807_error_response
+from app.utils import ensure_data_file_exists, create_rfc7807_error_response
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
+from app.logging_config import get_logger
 
+logger = get_logger()
 
 app = FastAPI()
 
@@ -11,6 +12,7 @@ app = FastAPI()
 # Handler to catch HTTPExceptions and return a JSON response with the RFC7807 format
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
+    logger.error("HTTPException: {} - {}", exc.status_code, exc.detail)
     return create_rfc7807_error_response(
         status_code=exc.status_code,
         title=exc.detail.split(".")[0],
@@ -22,6 +24,7 @@ async def http_exception_handler(request: Request, exc: HTTPException):
 # Handler to catch general exceptions and return a JSON response with the RFC7807 format
 @app.exception_handler(Exception)
 async def general_exception_handler(request: Request, exc: Exception):
+    logger.exception("An unexpected error occurred.")
     return create_rfc7807_error_response(
         status_code=500,
         title="Internal Server Error",
@@ -34,6 +37,7 @@ async def general_exception_handler(request: Request, exc: Exception):
 # For example, when a request is made with invalid data types.
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    logger.error("Validation Error: {}", exc)
     return create_rfc7807_error_response(
         status_code=422,
         title="Validation Error",

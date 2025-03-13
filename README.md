@@ -8,6 +8,7 @@
 4. [Building and Running with Docker](#🐳-building-and-running-with-docker)
 5. [Database](#🗄️-database)
 6. [Testing](#🧪-testing)
+7. [Logging](#📜-logging)
 
 ## 📖 Introduction
 
@@ -84,5 +85,9 @@ http://localhost:8080/docs
 ### Testing Tool
 
 For more information about the testing tool used, visit the [pytest repository](https://github.com/pytest-dev/pytest) or the [official page](https://docs.pytest.org/en/stable/).
+
+## 📜 Logging
+
+The application generates detailed logs of operations and errors in the `logs/app.log` file. 
 
 ---
