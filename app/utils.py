@@ -14,12 +14,21 @@ db = client[MONGODB_DB_NAME]
 
 
 def get_courses_collection():
+    """
+    Get the MongoDB collection for courses.
+
+    Returns:
+        - Collection: The MongoDB collection object for courses.
+    """
     return db.courses
 
 
 def create_rfc7807_error_response(
     status_code: int, title: str, detail: str, instance: str
 ):
+    """
+    Create an error response following the RFC 7807 format.
+    """
     return JSONResponse(
         status_code=status_code,
         content={
