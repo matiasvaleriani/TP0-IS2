@@ -4,7 +4,7 @@ import uuid
 import json
 import os
 from dotenv import load_dotenv
-from loguru import logger
+from loguru import logger # type: ignore
 
 from app.utils import ensure_data_file_exists, load_courses, save_courses
 from .models import CourseResponse, CourseCreate
