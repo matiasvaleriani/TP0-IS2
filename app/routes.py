@@ -6,7 +6,7 @@ from loguru import logger  # type: ignore
 from pymongo.errors import PyMongoError  # type: ignore
 import uuid
 from app.utils import get_courses_collection
-from .models import CourseResponse, CourseCreate
+from app.models import CourseResponse, CourseCreate
 
 router = APIRouter()
 
