@@ -1,104 +1,104 @@
-# 📌 Individual - Software Engineering II
+# 📌 Individual - Ingeniería de Software II
 
-## 📚 Table of Contents
+## 📚 Tabla de Contenidos
 
-1. [Introduction](#📖-introduction)
-2. [Project Challenges](#🚀-project-challenges)
-3. [Prerequisites](#🔧-prerequisites)
-4. [Building and Running with Docker](#🐳-building-and-running-with-docker)
-5. [Database](#🗄️-database)
+1. [Introducción](#📖-introducción)
+2. [Desafíos del Proyecto](#🚀-desafíos-del-proyecto)
+3. [Prerrequisitos](#🔧-prerrequisitos)
+4. [Construcción y Ejecución con Docker](#🐳-construcción-y-ejecución-con-docker)
+5. [Base de Datos](#🗄️-base-de-datos)
 6. [Testing](#🧪-testing)
 7. [Logging](#📜-logging)
 
-## 📖 Introduction
+## 📖 Introducción
 
-This project consists of a RESTful API developed with FastAPI in Python, aimed at managing courses within the ClassConnect platform. The API provides functionalities to create, view, and delete courses, using MongoDB for data storage. Best practices were implemented regarding error handling following the RFC 7807 standard, execution within a Dockerized environment, and automated testing with pytest to ensure software quality.
-
----
-
-## 🚀 Project Challenges
-
-During the development of the project, several technical and conceptual challenges were encountered:
-
-- Correct configuration and execution of Docker.
-- Handling environment variables with `.env`.
-- Exposing and testing FastAPI endpoints.
-- Using MongoDB for data persistence.
-- Automated Testing: Tests were created using pytest and httpx to validate the correct functioning of the endpoints, including tests for valid and invalid cases.
+Este proyecto consiste en una API RESTful desarrollada con FastAPI en Python, destinada a la gestión de cursos dentro de la plataforma ClassConnect. La API proporciona funcionalidades para crear, visualizar y eliminar cursos, utilizando MongoDB para el almacenamiento de datos. Se implementaron buenas prácticas en cuanto al manejo de errores siguiendo el estándar RFC 7807, ejecución en un entorno Dockerizado y pruebas automatizadas con pytest para garantizar la calidad del software.
 
 ---
 
-## 🔧 Prerequisites
+## 🚀 Desafíos del Proyecto
 
-Before running the project, make sure you have installed:
+Durante el desarrollo del proyecto, se encontraron varios desafíos técnicos y conceptuales:
+
+- Configuración y ejecución correcta de Docker.
+- Manejo de variables de entorno con `.env`.
+- Exposición y prueba de endpoints en FastAPI.
+- Uso de MongoDB para la persistencia de datos.
+- Pruebas Automatizadas: Se crearon pruebas utilizando pytest y httpx para validar el correcto funcionamiento de los endpoints, incluyendo pruebas para casos válidos e inválidos.
+
+---
+
+## 🔧 Prerrequisitos
+
+Antes de ejecutar el proyecto, asegúrate de tener instalado:
 
 - **Python 3.11**
-- **Docker** and **Docker Compose**
-- Optional: **MongoDB Compass**
+- **Docker** y **Docker Compose**
+- Opcional: **MongoDB Compass**
 
-If you want to test the API endpoints, you can use **Swagger UI**, which is available at `http://localhost:8080/docs`.
+Si deseas probar los endpoints de la API, puedes usar **Swagger UI**, disponible en `http://localhost:8080/docs`.
 
 ---
 
-## 🐳 Building and Running with Docker
+## 🐳 Construcción y Ejecución con Docker
 
-To build and run the Docker image using Docker Compose, follow these steps:
+Para construir y ejecutar la imagen de Docker utilizando Docker Compose, sigue estos pasos:
 
-### 1️⃣ Build and start the container
+### 1️⃣ Construir e iniciar el contenedor
 ```sh
 docker-compose up --build -d
 ```
 
-### 2️⃣ Verify that the container is running
+### 2️⃣ Verificar que el contenedor esté en ejecución
 ```sh
 docker ps
 ```
 
-### 3️⃣ Stop and remove the container
+### 3️⃣ Detener y eliminar el contenedor
 ```sh
 docker-compose down
 ```
 
 ---
 
-## 🗄️ Database
+## 🗄️ Base de Datos
 
-Currently, the API uses MongoDB as the database. The data is stored in the `data` folder in the project directory, ensuring that the data is retained between container restarts.
+Actualmente, la API utiliza MongoDB como base de datos. Los datos se almacenan en la carpeta data dentro del directorio del proyecto, asegurando que los datos se conserven entre reinicios del contenedor.
 
-To view the database, you can use MongoDB Compass:
+Para visualizar la base de datos, se puede utilizar MongoDB Compass:
 
-1. **Download and install MongoDB Compass** from [here](https://www.mongodb.com/try/download/compass).
-2. **Open MongoDB Compass**.
-3. **Connect to your MongoDB instance** by entering the following connection string:
+1. **Descarga e instala MongoDB Compass** desde [here](https://www.mongodb.com/try/download/compass).
+2. **Abrir MongoDB Compass**.
+3. **Conectar a la instancia de MongoDB** ingresando a la siguiente conexión:
 ```sh
 mongodb://localhost:27017
 ```
-4. **Click "Connect".**
+4. **Conectar**.
 
 ---
 
 ## 🧪 Testing
 
-### Automated Tests
+### Pruebas Automatizadas
 
-To run the automated tests, use the following command:
+Para ejecutar las pruebas automatizadas, utiliza el siguiente comando:
 ```sh
 docker-compose run --rm app sh -c "PYTHONPATH=/app pytest"
 ```
 
-### Manual Tests
+### Pruebas Manuales
 
-To manually test the endpoints, use **Swagger UI** at:
+Para probar manualmente los endpoints, se puede utilizar Swagger UI en:
 ```sh
 http://localhost:8080/docs
 ```
 
-### Testing Tool
+### Herramienta de Pruebas
 
-For more information about the testing tool used, visit the [pytest repository](https://github.com/pytest-dev/pytest) or the [official page](https://docs.pytest.org/en/stable/).
+Para más información sobre la herramienta de pruebas utilizada, visita el [repositorio de pytest de github](https://github.com/pytest-dev/pytest) o la [pagina oficial](https://docs.pytest.org/en/stable/).
 
 ## 📜 Logging
 
-The application generates detailed logs of operations and errors in the `logs/app.log` file. 
+La aplicación genera logs detallados de operaciones y errores en el archivo `logs/app.log`. 
 
 ---
