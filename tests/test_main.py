@@ -30,6 +30,20 @@ def test_create_course():
     delete_response = client.delete(f"/courses/{course_id}")
     assert delete_response.status_code == 204
 
+def test_create_course_without_title():
+    """
+    Tests the course creation endpoint by sending a POST request without the 'title' field.
+    Verifies that the response status is 422 is appropriate.
+    """
+    response = client.post(
+        "/courses",
+        json={
+            "description": "This is a test course description without a title.",
+        },
+    )
+    assert response.status_code == 422
+    assert response.json()["instance"] == "/courses"
+
 
 def test_get_courses():
     """
