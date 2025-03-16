@@ -17,7 +17,7 @@ def http_exception_handler(request: Request, exc: HTTPException):
         status_code=exc.status_code,
         title=exc.detail.split(".")[0],
         detail=exc.detail,
-        instance=str(request.url),
+        instance=str(request.url.path),
     )
 
 
@@ -29,7 +29,7 @@ def general_exception_handler(request: Request, exc: Exception):
         status_code=500,
         title="Internal Server Error",
         detail="An unexpected error occurred.",
-        instance=str(request.url),
+        instance=str(request.url.path),
     )
 
 
@@ -42,7 +42,7 @@ def validation_exception_handler(request: Request, exc: RequestValidationError):
         status_code=422,
         title="Validation Error",
         detail=str(exc),
-        instance=str(request.url),
+        instance=str(request.url.path),
     )
 
 
