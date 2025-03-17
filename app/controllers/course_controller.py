@@ -18,7 +18,6 @@ def create_course_controller(title: str, description: str):
             logger.error("Invalid input data for creating a course")
             raise HTTPException(status_code=400, detail="Invalid input data")
         course = create_course_service(title, description)
-        logger.info(f"Course created successfully: {course['_id']}")
         return course
     except Exception as e:
         logger.error(f"Error creating course: {e}")
@@ -31,7 +30,6 @@ def get_all_courses_controller():
     """
     try:
         courses = get_all_courses_service()
-        logger.info("Retrieved all courses successfully")
         return courses
     except Exception as e:
         logger.error(f"Error retrieving all courses: {e}")
@@ -45,9 +43,7 @@ def get_course_by_id_controller(course_id: str):
     try:
         course = get_course_by_id_service(course_id)
         if not course:
-            logger.error(f"Course with ID {course_id} not found")
             raise HTTPException(status_code=404, detail=f"The course with ID {course_id} was not found.")
-        logger.info(f"Retrieved course successfully: {course_id}")
         return course
     except HTTPException as http_exc:
         raise http_exc
@@ -62,7 +58,6 @@ def delete_course_controller(course_id: str):
         deleted_count = delete_course_service(course_id)
         if deleted_count == 0:
             raise HTTPException(status_code=404, detail=f"The course with ID {course_id} was not found.")
-        logger.info(f"Course deleted successfully: {course_id}")
     except Exception as e:
         logger.error(f"Error deleting course with ID {course_id}: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
