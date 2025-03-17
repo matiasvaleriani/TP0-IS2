@@ -40,7 +40,7 @@ Durante el desarrollo del proyecto, se encontraron varios desafíos técnicos y 
     - Esto también facilita la depuración, ya que las pruebas pueden ejecutarse de forma independiente y no interrumpen la ejecución de los contenedores principales.
 
 - **Exposición y prueba de endpoints en FastAPI**:
-  - Se utilizó Swagger UI, disponible en `http://localhost:8080/docs`, para probar manualmente los endpoints de la API. Esto facilita la validación de las funcionalidades implementadas y la detección de errores en tiempo de desarrollo.
+  - Se utilizó Swagger UI, disponible en `http://localhost:${PORT:-8080}/docs`, para probar manualmente los endpoints de la API. Esto facilita la validación de las funcionalidades implementadas y la detección de errores en tiempo de desarrollo.
 
 - **Uso de MongoDB para la persistencia de datos**:
   - MongoDB se configuró como base de datos para almacenar la información de los cursos. Se utilizó un volumen para garantizar la persistencia de los datos entre reinicios del contenedor.
@@ -57,8 +57,6 @@ Antes de ejecutar el proyecto, asegúrate de tener instalado:
 - **Python 3.11**
 - **Docker** y **Docker Compose**
 - Opcional: **MongoDB Compass**
-
-Si deseas probar los endpoints de la API, puedes usar **Swagger UI**, disponible en `http://localhost:8080/docs`.
 
 ---
 
@@ -112,7 +110,7 @@ docker-compose run --rm app sh -c "PYTHONPATH=/app pytest"
 
 Para probar manualmente los endpoints, se puede utilizar Swagger UI en:
 ```sh
-http://localhost:8080/docs
+http://localhost:${PORT:-8080}/docs
 ```
 
 ### Herramienta de Pruebas
