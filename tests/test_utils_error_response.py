@@ -1,6 +1,6 @@
 import pytest
 from fastapi.responses import JSONResponse
-from app.utils import create_rfc7807_error_response
+from app.utils.error_response import create_rfc7807_error_response
 
 def test_create_rfc7807_error_response():
     """
