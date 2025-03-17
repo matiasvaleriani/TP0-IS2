@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Dict, Any
 
 
@@ -8,7 +8,7 @@ class CourseCreate(BaseModel):
     """
 
     title: str
-    description: str
+    description: str = Field(..., min_length=50, max_length=255)
 
 
 class CourseResponse(BaseModel):

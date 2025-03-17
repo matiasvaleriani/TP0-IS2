@@ -9,20 +9,21 @@ client = TestClient(app)
 
 def test_create_course():
     """
-    Tests the course creation endpoint by sending a POST request with sample data.
+    Tests the course creation endpoint by sending a POST request with valid data.
     Verifies that the response status is 201 and the returned data matches the input.
     """
     response = client.post(
         "/courses",
         json={
             "title": "Test Course",
-            "description": "This is a test course description.",
+            "description": "This is a test course description with at least 50 characters.",
         },
     )
     assert response.status_code == 201
     assert response.json()["data"]["title"] == "Test Course"
     assert (
-        response.json()["data"]["description"] == "This is a test course description."
+        response.json()["data"]["description"]
+        == "This is a test course description with at least 50 characters."
     )
 
     # Clean up
@@ -30,15 +31,49 @@ def test_create_course():
     delete_response = client.delete(f"/courses/{course_id}")
     assert delete_response.status_code == 204
 
-def test_create_course_without_title():
+
+def test_create_course_with_short_description():
     """
-    Tests the course creation endpoint by sending a POST request without the 'title' field.
-    Verifies that the response status is 422 is appropriate.
+    Tests the course creation endpoint by sending a POST request with a description
+    shorter than 50 characters. Verifies that the response status is 422.
     """
     response = client.post(
         "/courses",
         json={
-            "description": "This is a test course description without a title.",
+            "title": "Test Course",
+            "description": "Too short.",
+        },
+    )
+    assert response.status_code == 422
+    assert response.json()["detail"] == "String should have at least 50 characters"
+    assert response.json()["instance"] == "/courses"
+
+def test_create_course_with_long_description():
+    """
+    Tests the course creation endpoint by sending a POST request with a description
+    longer than 255 characters. Verifies that the response status is 422.
+    """
+    long_description = "A" * 256  # 256 characters
+    response = client.post(
+        "/courses",
+        json={
+            "title": "Test Course",
+            "description": long_description,
+        },
+    )
+    assert response.status_code == 422
+    assert response.json()["detail"] == "String should have at most 255 characters"
+    assert response.json()["instance"] == "/courses"
+
+def test_create_course_without_title():
+    """
+    Tests the course creation endpoint by sending a POST request without the 'title' field.
+    Verifies that the response status is 422.
+    """
+    response = client.post(
+        "/courses",
+        json={
+            "description": "This is a test course description with at least 50 characters.",
         },
     )
     assert response.status_code == 422
@@ -65,7 +100,7 @@ def test_get_course():
         "/courses",
         json={
             "title": "Test Course",
-            "description": "This is a test course description.",
+            "description": "This is a test course description with at least 50 characters.",
         },
     )
     course_id = create_response.json()["data"]["_id"]
@@ -89,7 +124,7 @@ def test_delete_course():
         "/courses",
         json={
             "title": "Test Course",
-            "description": "This is a test course description.",
+            "description": "This is a test course description with at least 50 characters.",
         },
     )
     course_id = create_response.json()["data"]["_id"]

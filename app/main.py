@@ -38,10 +38,14 @@ def general_exception_handler(request: Request, exc: Exception):
 @app.exception_handler(RequestValidationError)
 def validation_exception_handler(request: Request, exc: RequestValidationError):
     logger.error("Validation Error: {}", exc)
+    
+    error_messages = [error['msg'] for error in exc.errors()]
+    detail_message = error_messages[0] if error_messages else "Validation error occurred."
+    
     return create_rfc7807_error_response(
         status_code=422,
         title="Validation Error",
-        detail=str(exc),
+        detail=detail_message,
         instance=str(request.url.path),
     )
 
