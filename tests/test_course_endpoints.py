@@ -48,6 +48,7 @@ def test_create_course_with_short_description():
     assert response.json()["detail"] == "String should have at least 50 characters"
     assert response.json()["instance"] == "/courses"
 
+
 def test_create_course_with_long_description():
     """
     Tests the course creation endpoint by sending a POST request with a description
@@ -64,6 +65,7 @@ def test_create_course_with_long_description():
     assert response.status_code == 422
     assert response.json()["detail"] == "String should have at most 255 characters"
     assert response.json()["instance"] == "/courses"
+
 
 def test_create_course_without_title():
     """

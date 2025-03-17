@@ -5,6 +5,7 @@ import uuid
 
 logger = get_logger()
 
+
 def create_course_service(title: str, description: str):
     """
     Service to create a new course in the database.
