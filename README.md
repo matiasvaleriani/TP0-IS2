@@ -20,12 +20,34 @@ Este proyecto consiste en una API RESTful desarrollada con FastAPI en Python, de
 
 Durante el desarrollo del proyecto, se encontraron varios desafíos técnicos y conceptuales:
 
-- Configuración y ejecución correcta de Docker.
-- Manejo de variables de entorno con `.env`.
-- Exposición y prueba de endpoints en FastAPI.
-- Uso de MongoDB para la persistencia de datos.
-- Pruebas Automatizadas: Se crearon pruebas utilizando pytest y httpx para validar el correcto funcionamiento de los endpoints, incluyendo pruebas para casos válidos e inválidos.
+- **Configuración y ejecución correcta de Docker**:
+  - Se utilizó Docker Compose para simplificar la configuración y ejecución de los servicios de la aplicación (API y base de datos MongoDB). Esto permite que ambos contenedores se ejecuten en la misma red automáticamente, facilitando la comunicación entre ellos.
+  - Se definió un volumen para MongoDB (`./data:/data/db`) para garantizar la persistencia de los datos entre reinicios del contenedor.
+  - Se utilizó `restart: always` para asegurar que los contenedores se reinicien automáticamente en caso de fallos o reinicios del sistema.
 
+- **Manejo de variables de entorno con `.env`**:
+  - Se utilizó un archivo `.env` para centralizar las configuraciones sensibles y específicas del entorno, como el puerto de la aplicación (`PORT`) y las credenciales de conexión a MongoDB (`MONGODB_URI` y `MONGODB_DB_NAME`). Esto permite una configuración más flexible y evita exponer información sensible directamente en el archivo `docker-compose.yml`.
+
+- **Ejecución de pruebas automatizadas**:
+  - Las pruebas automatizadas se ejecutan utilizando el comando:
+    ```sh
+    docker-compose run --rm app sh -c "PYTHONPATH=/app pytest"
+    ```
+    Esto permite ejecutar las pruebas en un contenedor aislado, asegurando que el entorno de pruebas sea consistente y reproducible.
+  - **Decisión de no incluir las pruebas en el flujo de `docker-compose up`**:
+    - Las pruebas no se integraron directamente en el flujo de `docker-compose up` porque este comando está diseñado para iniciar los servicios de la aplicación en un entorno de desarrollo o producción, no para ejecutar pruebas.
+    - Separar las pruebas del flujo principal permite ejecutar los tests solo cuando sea necesario, sin afectar el despliegue de los servicios.
+    - Esto también facilita la depuración, ya que las pruebas pueden ejecutarse de forma independiente y no interrumpen la ejecución de los contenedores principales.
+
+- **Exposición y prueba de endpoints en FastAPI**:
+  - Se utilizó Swagger UI, disponible en `http://localhost:8080/docs`, para probar manualmente los endpoints de la API. Esto facilita la validación de las funcionalidades implementadas y la detección de errores en tiempo de desarrollo.
+
+- **Uso de MongoDB para la persistencia de datos**:
+  - MongoDB se configuró como base de datos para almacenar la información de los cursos. Se utilizó un volumen para garantizar la persistencia de los datos entre reinicios del contenedor.
+  - Para facilitar la visualización de los datos, se recomendó el uso de MongoDB Compass como herramienta gráfica.
+
+- **Pruebas Automatizadas**:
+  - Se crearon pruebas utilizando `pytest` y `httpx` para validar el correcto funcionamiento de los endpoints, incluyendo pruebas para casos válidos e inválidos. Esto asegura que la API cumpla con los requisitos funcionales y maneje adecuadamente los errores.
 ---
 
 ## 🔧 Prerrequisitos
