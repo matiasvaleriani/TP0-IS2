@@ -113,6 +113,9 @@ Para probar manualmente los endpoints, se puede utilizar Swagger UI en:
 http://localhost:${PORT:-8080}/docs
 ```
 
+Ahi mismo se pueden probar los endpoints al seleccionar la opcion `Try it out`. Luego, se deberá completar con el correspondiente `Request body`, y finalmente ejecutar la consulta con `Execute`. Esto permite observar la respuesta con su formato adecuado, junto al `Status code`.
+
+
 ### Herramienta de Pruebas
 
 Para más información sobre la herramienta de pruebas utilizada, visita el [repositorio de pytest de github](https://github.com/pytest-dev/pytest) o la [pagina oficial](https://docs.pytest.org/en/stable/).
