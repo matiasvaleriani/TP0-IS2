@@ -112,9 +112,11 @@ Para probar manualmente los endpoints, se puede utilizar Swagger UI en:
 ```sh
 http://localhost:${PORT:-8080}/docs
 ```
+Si port es 8080, la URL será `http://localhost:8080/docs`.
 
 Ahi mismo se pueden probar los endpoints al seleccionar la opcion `Try it out`. Luego, se deberá completar con el correspondiente `Request body`, y finalmente ejecutar la consulta con `Execute`. Esto permite observar la respuesta con su formato adecuado, junto al `Status code`.
 
+Para la parte de los endpoints `GET /courses` y `GET /courses/{id}`, ademas de visualizarlos mediante `http://localhost:${PORT:-8080}/docs`, se puede acceder con los siguientes URL respectivamente: `localhost:${PORT:-8080}/courses` y `localhost:${PORT:-8080}/courses/{id}`.  
 
 ### Herramienta de Pruebas
 
