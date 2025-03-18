@@ -85,7 +85,7 @@ docker-compose down
 
 Actualmente, la API utiliza MongoDB como base de datos. Los datos se almacenan en la carpeta data dentro del directorio del proyecto, asegurando que los datos se conserven entre reinicios del contenedor.
 
-Para visualizar la base de datos, se puede utilizar MongoDB Compass:
+Para visualizar la base de datos mediante MongoDB Compass:
 
 1. **Descarga e instala MongoDB Compass** desde [here](https://www.mongodb.com/try/download/compass).
 2. **Abrir MongoDB Compass**.
@@ -94,6 +94,8 @@ Para visualizar la base de datos, se puede utilizar MongoDB Compass:
 mongodb://localhost:27017
 ```
 4. **Conectar**.
+
+🚨 **No es indispensable el uso de MongoDB Compass, pero ofrece una interfaz mas amigable. Como alternativa, se puede utilizar Swagger UI como se explicará mas adelante en las pruebas manuales.**
 
 ---
 
