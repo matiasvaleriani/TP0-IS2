@@ -105,8 +105,13 @@ mongodb://localhost:27017
 
 Para ejecutar las pruebas automatizadas, utiliza el siguiente comando:
 ```sh
-docker-compose run --rm app sh -c "PYTHONPATH=/app pytest"
+docker-compose run --rm app sh -c "PYTHONPATH=/app PYTEST_CURRENT_TEST=1 pytest"
 ```
+
+Este comando incluye la variable de entorno `PYTEST_CURRENT_TEST=1`, que activa configuraciones específicas para el entorno de pruebas. Esto asegura que:
+
+- No se escriban logs: Durante la ejecución de los tests, el sistema de logging está deshabilitado para evitar generar archivos innecesarios o ensuciar la salida de los logs de desarrollo/producción.
+- Base de datos separada: Los tests utilizan una base de datos de pruebas independiente, definida en las variables de entorno `TEST_MONGODB_URI` y `TEST_MONGODB_DB_NAME`. Esto garantiza que los datos de la base de datos original no se vean afectados durante las pruebas.
 
 ### Pruebas Manuales
 
