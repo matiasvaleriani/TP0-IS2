@@ -51,7 +51,7 @@ def get_course_by_id_service(course_id: str):
         course = courses_collection.find_one({"_id": course_id})
         if course:
             course["_id"] = str(course["_id"])
-        logger.info(f"Course retrieved from database: {course_id}")
+            logger.info(f"Course retrieved from database: {course_id}")
         return course
     except PyMongoError as e:
         logger.error(f"Database error while retrieving course with ID {course_id}: {e}")
