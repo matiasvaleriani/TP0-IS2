@@ -126,6 +126,6 @@ Para más información sobre la herramienta de pruebas utilizada, visita el [rep
 
 ## 📜 Logging
 
-La aplicación genera logs detallados de operaciones y errores en el archivo `logs/app.log`. 
+La aplicación genera logs detallados de operaciones y errores en el archivo `logs/app.log` **solo si el entorno (`ENVIRONMENT`) está configurado como `development`**.
 
 ---
