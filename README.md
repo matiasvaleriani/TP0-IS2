@@ -105,7 +105,7 @@ mongodb://localhost:27017
 
 Para ejecutar las pruebas automatizadas, utiliza el siguiente comando:
 ```sh
-docker-compose run --rm app sh -c "PYTHONPATH=/app PYTEST_CURRENT_TEST=1 pytest"
+docker-compose run --rm app sh -c "PYTHONPATH='/app' PYTEST_CURRENT_TEST=1 pytest"
 ```
 
 Este comando incluye la variable de entorno `PYTEST_CURRENT_TEST=1`, que activa configuraciones específicas para el entorno de pruebas. Esto asegura que:
