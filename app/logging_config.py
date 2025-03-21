@@ -21,7 +21,7 @@ if not IS_TESTING:
             retention="10 days",
             level="DEBUG",
         )
-    
+
     logger.info(f"Application is running in '{environment}' environment.")
 
 
