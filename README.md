@@ -132,7 +132,17 @@ Para más información sobre la herramienta de pruebas utilizada, visita el [rep
 ## 📜 Logging
 
 La aplicación genera logs detallados de operaciones y errores en el archivo `logs/app.log` **solo si el entorno (`ENVIRONMENT`) está configurado como `development`**.
-Al ejecutar la aplicacion mediante `docker-compose up --build -d`, no se muestran los logs por terminal. Pero si se desea verlos por terminal, se debe ejecutar `docker-compose logs -f app` para ver los logs históricos generados por la aplicacion y mostrará cualquier log nuevo que se genere en tiempo real. 
-Sino `docker-compose logs app` muestra los logs generados hasta el momento en que se ejecuta el comando, pero no muestra los nuevos logs que se generen después.
+Al ejecutar la aplicacion mediante `docker-compose up --build -d`, no se muestran los logs por terminal. Pero si se desea verlos por terminal, se debe ejecutar:
+
+```sh
+docker-compose logs -f app
+```
+
+Esto es para ver los logs históricos generados por la aplicacion y mostrará cualquier log nuevo que se genere en tiempo real. 
+
+Sino para mostrar los logs generados hasta el momento en que se ejecuta el comando, pero no muestra los nuevos logs que se generen después, se utiliza:
+```sh
+docker-compose logs app
+```
 
 ---
