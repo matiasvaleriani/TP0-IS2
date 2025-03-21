@@ -129,6 +129,8 @@ Para la parte de los endpoints `GET /courses` y `GET /courses/{id}`, ademas de v
 
 Para más información sobre la herramienta de pruebas utilizada, visita el [repositorio de pytest de github](https://github.com/pytest-dev/pytest) o la [pagina oficial](https://docs.pytest.org/en/stable/).
 
+---
+
 ## 📜 Logging
 
 La aplicación genera logs detallados de operaciones y errores en el archivo `logs/app.log` **solo si el entorno (`ENVIRONMENT`) está configurado como `development`**.
